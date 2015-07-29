@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Encrypt File</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+        <textarea id="savedata" style="width: 500px; height: 100px" onfocus="this.select()" onmouseup="return false" placeholder="Paste save file here."></textarea>
+        <br>
+        <!--<button onclick="decode()">Crack Open Save File</button>-->
+        <button onclick="encode()">Recode Save File</button>
+        <br>
+        <textarea id="result" style="width: 500px; height: 100px" onfocus="this.select()" onmouseup="return false" placeholder="The result will show up here."></textarea>
+        <p id="spawnRange"></p>
+        <p id="item"></p>
+        <div id="divResults"></div>
+        <p id="result"></p>
+        
+
+<script>
+
+function decode() 
+{
+    const ANTI_CHEAT_CODE = "Fe12NAfA3R6z4k0z";
+    const SALT = "af0ik392jrmt0nsfdghy0";
+    var txt = $("#savedata").val();
+
+    if (txt.search(ANTI_CHEAT_CODE) != -1) {
+        var result = txt.split(ANTI_CHEAT_CODE);
+        txt = "";
+        for (var i = 0; i < result[0].length; i += 2) {
+            txt += result[0][i];
+        }
+        if (CryptoJS.MD5(txt + SALT) != result[1]) {
+            alert("Invalid Save File");
+            return;
+        }
+    }else{
+        alert("Not a valid save file");
+    }
+    document.getElementById("result").value = JSON.stringify(jQuery.parseJSON(atob(txt)));
+}
+function encode()
+{
+    const ANTI_CHEAT_CODE = "Fe12NAfA3R6z4k0z";
+    const SALT = "af0ik392jrmt0nsfdghy0";
+    var txt = $("#savedata").val();
+    //document.write(txt);
+
+    var data = btoa(txt);
+    //document.write(data);
+    var sprinkled = "";
+    var vulgar_word = "BLAHblahBLAH";
+        for (var i = 0; i < data.length; i++) {
+          sprinkled += data[i];
+          sprinkled += vulgar_word[i % vulgar_word.length];
+        }
+    //document.write(CryptoJS.MD5(data + SALT));
+    document.getElementById("result").value = (sprinkled + ANTI_CHEAT_CODE + CryptoJS.MD5(data + SALT));
+
+}
+</script>
+</body>
+</html>
